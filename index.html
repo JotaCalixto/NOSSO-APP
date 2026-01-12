@@ -1005,41 +1005,70 @@
   </div>
 
   <script>
-    const STORAGE_KEYS = {
-      TASKS: 'nossoApp_tasks',
-      SHOPPING: 'nossoApp_shopping',
-      EVENTS: 'nossoApp_events'
-    };
-
     const state = {
-      tasks: [],
-      shopping: [],
-      events: []
-    };
+  tasks: [],
+  shopping: [],
+  events: []
+};
 
-    function loadState() {
-      try {
-        state.tasks =
-          JSON.parse(localStorage.getItem(STORAGE_KEYS.TASKS)) || [];
-        state.shopping =
-          JSON.parse(localStorage.getItem(STORAGE_KEYS.SHOPPING)) || [];
-        state.events =
-          JSON.parse(localStorage.getItem(STORAGE_KEYS.EVENTS)) || [];
-      } catch (e) {
-        state.tasks = [];
-        state.shopping = [];
-        state.events = [];
-      }
-    }
+// Carregar dados do Firestore ao iniciar
+async function loadState() {
+  try {
+    const [tasksSnap, shoppingSnap, eventsSnap] = await Promise.all([
+      db.collection('tasks').get(),
+      db.collection('shopping').get(),
+      db.collection('events').get()
+    ]);
 
-    function persistState() {
-      localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(state.tasks));
-      localStorage.setItem(
-        STORAGE_KEYS.SHOPPING,
-        JSON.stringify(state.shopping)
-      );
-      localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(state.events));
-    }
+    state.tasks = tasksSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    state.shopping = shoppingSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    state.events = eventsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (e) {
+    console.error('Erro ao carregar do Firestore', e);
+    state.tasks = [];
+    state.shopping = [];
+    state.events = [];
+  }
+}
+
+// Salvar tudo no Firestore
+async function persistState() {
+  try {
+    // Apaga coleções atuais
+    const [tasksSnap, shoppingSnap, eventsSnap] = await Promise.all([
+      db.collection('tasks').get(),
+      db.collection('shopping').get(),
+      db.collection('events').get()
+    ]);
+
+    const batch = db.batch();
+
+    tasksSnap.forEach(doc => batch.delete(doc.ref));
+    shoppingSnap.forEach(doc => batch.delete(doc.ref));
+    eventsSnap.forEach(doc => batch.delete(doc.ref));
+
+    // Recria com o conteúdo do state
+    state.tasks.forEach(item => {
+      const ref = db.collection('tasks').doc(item.id || undefined);
+      batch.set(ref, { ...item });
+    });
+
+    state.shopping.forEach(item => {
+      const ref = db.collection('shopping').doc(item.id || undefined);
+      batch.set(ref, { ...item });
+    });
+
+    state.events.forEach(item => {
+      const ref = db.collection('events').doc(item.id || undefined);
+      batch.set(ref, { ...item });
+    });
+
+    await batch.commit();
+  } catch (e) {
+    console.error('Erro ao salvar no Firestore', e);
+  }
+}
+
 
     function uuid() {
       return (
@@ -1582,36 +1611,38 @@
       close.addEventListener('click', () => toast.classList.remove('show'));
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadState();
-      setupTabs();
-      setupToast();
+    document.addEventListener('DOMContentLoaded', async () => {
+  setupTabs();
+  setupToast();
 
-      document
-        .getElementById('taskForm')
-        .addEventListener('submit', handleTaskSubmit);
-      document
-        .getElementById('shoppingForm')
-        .addEventListener('submit', handleShoppingSubmit);
-      document
-        .getElementById('eventForm')
-        .addEventListener('submit', handleEventSubmit);
+  document
+    .getElementById('taskForm')
+    .addEventListener('submit', handleTaskSubmit);
+  document
+    .getElementById('shoppingForm')
+    .addEventListener('submit', handleShoppingSubmit);
+  document
+    .getElementById('eventForm')
+    .addEventListener('submit', handleEventSubmit);
 
-      document
-        .getElementById('exportShoppingBtn')
-        .addEventListener('click', handleExportShopping);
-      document
-        .getElementById('clearTasksBtn')
-        .addEventListener('click', clearCompletedTasks);
-      document
-        .getElementById('clearPastEventsBtn')
-        .addEventListener('click', clearPastEvents);
+  document
+    .getElementById('exportShoppingBtn')
+    .addEventListener('click', handleExportShopping);
+  document
+    .getElementById('clearTasksBtn')
+    .addEventListener('click', clearCompletedTasks);
+  document
+    .getElementById('clearPastEventsBtn')
+    .addEventListener('click', clearPastEvents);
 
-      renderTasks();
-      renderShopping();
-      renderEvents();
-      updateSummaries();
-    });
+  // Espera carregar do Firestore antes de desenhar
+  await loadState();
+  renderTasks();
+  renderShopping();
+  renderEvents();
+  updateSummaries();
+});
+
   </script>
 </body>
 </html>
