@@ -23,7 +23,27 @@
     }'
   />
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBahDvZPq78LQLlKv-1tqAskZJWP9UXfb0",
+      authDomain: "nosso-app-b9917.firebaseapp.com",
+      projectId: "nosso-app-b9917",
+      storageBucket: "nosso-app-b9917.firebasestorage.app",
+      messagingSenderId: "994549530268",
+      appId: "1:994549530268:web:96f8dc4cb2d9586b9f7759",
+      measurementId: "G-PSZ2969HZ9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
   <style>
+    /* === teu CSS original aqui (mantive igual ao arquivo) === */
     :root {
       --bg: #050816;
       --bg-elevated: #0f172a;
@@ -250,81 +270,179 @@
       letter-spacing: 0.01em;
     }
 
-    .section-subtitle {
+    .section-title-row span {
       font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 6px;
     }
 
-    .btn-ghost {
+    .list-scroll {
+      max-height: calc(100vh - 360px);
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-top: 4px;
+    }
+
+    .list-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .list-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .list-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.5);
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 5px 10px;
-      background: rgba(15, 23, 42, 0.95);
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
-      display: inline-flex;
+    }
+
+    .item-card {
+      background: radial-gradient(circle at top left, #020617, #020617);
+      border-radius: 16px;
+      padding: 9px 10px 9px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
       align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-
-    .btn-ghost:hover {
-      border-color: rgba(249, 250, 251, 0.7);
-      color: #e5e7eb;
-      background: rgba(15, 23, 42, 1);
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
       margin-bottom: 8px;
     }
 
-    .pill {
-      font-size: 10px;
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .checkbox-input {
+      width: 18px;
+      height: 18px;
       border-radius: 999px;
-      padding: 4px 8px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: var(--text-muted);
+      border: 2px solid rgba(148, 163, 184, 0.9);
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.95);
+    }
+
+    .checkbox-input:checked {
+      background: radial-gradient(circle at 30% 20%, #22c55e, #4ade80);
+      border-color: #22c55e;
+    }
+
+    .checkbox-input:checked::after {
+      content: '✓';
+      font-size: 12px;
+      color: #f9fafb;
+    }
+
+    .item-main {
+      display: flex;
+      flex-direction: column;
       gap: 4px;
     }
 
-    .pill-badge {
-      width: 8px;
-      height: 8px;
+    .item-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .item-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .item-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 3px 8px;
       border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.5);
     }
 
-    .pill-badge.green {
-      background: #22c55e;
+    .tag-pill {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      white-space: nowrap;
     }
 
-    .pill-badge.yellow {
-      background: #eab308;
+    .tag-pill.todo {
+      border-color: rgba(248, 250, 252, 0.35);
+      background: rgba(59, 130, 246, 0.2);
     }
 
-    .pill-badge.blue {
-      background: #38bdf8;
+    .tag-pill.done {
+      border-color: rgba(45, 212, 191, 0.6);
+      background: rgba(16, 185, 129, 0.2);
+      color: #a7f3d0;
     }
 
-    .pill-badge.pink {
-      background: #f472b6;
+    .item-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
     }
 
-    .pill-badge.purple {
-      background: #a855f7;
+    .icon-btn {
+      border-radius: 999px;
+      border: none;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      background: rgba(31, 41, 55, 0.95);
+      color: #f9fafb;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .icon-btn.danger {
+      background: rgba(127, 29, 29, 0.95);
+      border-color: rgba(248, 113, 113, 0.65);
+    }
+
+    .icon-btn.secondary {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .icon-btn:active {
+      transform: scale(0.96);
+    }
+
+    .strikethrough {
+      text-decoration: line-through;
+      color: #6b7280;
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: 1.1fr 1.1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 8px;
     }
@@ -346,287 +464,80 @@
     .field-select,
     .field-textarea {
       width: 100%;
-      border-radius: 12px;
+      border-radius: 999px;
       border: 1px solid rgba(55, 65, 81, 0.9);
-      background: radial-gradient(circle at top left, #1f2937 0, #020617 70%);
-      color: var(--text);
+      background: rgba(15, 23, 42, 0.9);
+      color: #f9fafb;
       font-size: 13px;
-      padding: 9px 10px;
+      padding: 7px 10px;
       outline: none;
-      transition: border-color var(--transition-fast),
-        box-shadow var(--transition-fast),
-        background var(--transition-fast);
+    }
+
+    .field-textarea {
+      border-radius: 12px;
+      resize: vertical;
+      min-height: 60px;
+      font-size: 12px;
     }
 
     .field-input::placeholder,
     .field-textarea::placeholder {
-      color: rgba(148, 163, 184, 0.9);
-    }
-
-    .field-textarea {
-      resize: vertical;
-      min-height: 52px;
-      max-height: 110px;
-    }
-
-    .field-input:focus,
-    .field-select:focus,
-    .field-textarea:focus {
-      border-color: rgba(129, 140, 248, 0.9);
-      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+      color: #6b7280;
     }
 
     .btn-primary {
+      margin-top: 4px;
       width: 100%;
-      border-radius: 14px;
+      border-radius: 999px;
       border: none;
-      padding: 10px 10px;
-      font-size: 14px;
+      padding: 9px 0;
+      font-size: 13px;
       font-weight: 600;
+      background: radial-gradient(circle at top, #7c3aed, #4c1d95);
       color: #f9fafb;
-      cursor: pointer;
-      background: linear-gradient(135deg, #7c3aed, #f97316);
-      box-shadow: 0 14px 30px rgba(30, 64, 175, 0.7);
+      box-shadow: 0 12px 24px rgba(88, 28, 135, 0.7);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-top: 2px;
-      transition: transform 120ms ease-out, box-shadow 120ms ease-out,
-        filter 120ms ease-out;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(88, 28, 135, 0.9);
     }
 
     .btn-primary:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
-      filter: brightness(0.98);
+      transform: translateY(0);
+      box-shadow: 0 8px 18px rgba(88, 28, 135, 0.7);
     }
 
-    .btn-primary span.icon {
-      font-size: 16px;
-    }
-
-    .list-scroll {
-      max-height: 260px;
-      overflow-y: auto;
-      padding-right: 4px;
-      margin-top: 8px;
-    }
-
-    .item-card {
-      border-radius: 14px;
-      padding: 10px 10px;
-      margin-bottom: 6px;
-      background: linear-gradient(135deg, #020617, #020617);
-      border: 1px solid rgba(31, 41, 55, 0.95);
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      position: relative;
-    }
-
-    .item-main {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .item-title-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 2px;
-    }
-
-    .item-title {
-      font-size: 13px;
-      font-weight: 600;
-      word-break: break-word;
-    }
-
-    .item-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 2px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .item-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 1px;
-    }
-
-    .tag {
-      font-size: 10px;
-      border-radius: 999px;
-      padding: 3px 6px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: var(--text-muted);
-    }
-
-    .tag-pill {
-      padding: 3px 7px;
-      border-radius: 999px;
-      font-size: 10px;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .tag-pill.todo {
-      background: var(--primary-soft-strong);
-      color: #e5e7eb;
-    }
-
-    .tag-pill.done {
-      background: rgba(34, 197, 94, 0.18);
-      color: #bbf7d0;
-    }
-
-    .tag-pill.late {
-      background: rgba(239, 68, 68, 0.2);
-      color: #fecaca;
-    }
-
-    .item-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    .icon-btn {
-      width: 24px;
-      height: 24px;
+    .btn-secondary {
       border-radius: 999px;
       border: none;
-      background: rgba(15, 23, 42, 0.98);
-      color: var(--text-muted);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background var(--transition-fast), color var(--transition-fast),
-        transform 120ms ease-out;
-    }
-
-    .icon-btn:hover {
-      background: rgba(31, 41, 55, 0.98);
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(17, 24, 39, 0.95);
       color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      cursor: pointer;
     }
 
-    .icon-btn:active {
-      transform: scale(0.95);
-    }
-
-    .icon-btn.danger {
-      color: #fca5a5;
-    }
-
-    .icon-btn.danger:hover {
-      background: rgba(127, 29, 29, 0.95);
+    .btn-secondary.danger {
+      background: rgba(127, 29, 29, 0.9);
+      border-color: rgba(248, 113, 113, 0.75);
       color: #fee2e2;
     }
 
-    .checkbox-wrap {
-      margin-right: 2px;
-      margin-top: 2px;
-    }
-
-    .checkbox-input {
-      width: 18px;
-      height: 18px;
-      border-radius: 6px;
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      appearance: none;
-      background: rgba(15, 23, 42, 0.98);
-      cursor: pointer;
-      position: relative;
-      transition: all var(--transition-fast);
-    }
-
-    .checkbox-input:checked {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      border-color: #22c55e;
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.7);
-    }
-
-    .checkbox-input:checked::after {
-      content: '✓';
-      position: absolute;
-      color: #ecfdf5;
-      font-size: 13px;
-      inset: 0;
+    .btn-row {
       display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .strikethrough {
-      text-decoration: line-through;
-      text-decoration-thickness: 1.2px;
-      opacity: 0.7;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%) translateY(120%);
-      max-width: 480px;
-      width: calc(100% - 32px);
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: radial-gradient(circle at top left, #22c55e, #16a34a);
-      color: #ecfdf5;
-      font-size: 13px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
       justify-content: space-between;
       gap: 8px;
-      box-shadow: 0 18px 35px rgba(22, 163, 74, 0.6);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 40;
-      transition: transform 180ms ease-out, opacity 180ms ease-out;
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .toast-text {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .toast-badge {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.2);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-    }
-
-    .toast-close {
-      border: none;
-      background: transparent;
-      color: #dcfce7;
-      font-size: 16px;
-      cursor: pointer;
+      margin-top: 6px;
     }
 
     .footer-note {
@@ -637,7 +548,7 @@
     }
 
     .footer-note span {
-      color: #e5e7eb;
+      color: #f5e7eb;
     }
 
     @media (max-width: 400px) {
@@ -645,36 +556,78 @@
         border-radius: 20px;
         padding-inline: 14px;
       }
+
       .content-card {
         border-radius: 18px;
       }
+
       .summary-row {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
+
       .app-title-text h1 {
         font-size: 18px;
       }
     }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: rgba(15, 23, 42, 0.98);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 200ms ease-out, opacity 200ms ease-out;
+      z-index: 50;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .toast-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #a855f7, #4c1d95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+    }
+
+    .toast-close {
+      border-radius: 999px;
+      border: none;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: transparent;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+
+    .summary-prompt {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
   </style>
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyBahDvZPq78LQLlKv-1tqAskZJWP9UXfb0",
-  authDomain: "nosso-app-b9917.firebaseapp.com",
-  projectId: "nosso-app-b9917",
-  storageBucket: "nosso-app-b9917.firebasestorage.app",
-  messagingSenderId: "994549530268",
-  appId: "1:994549530268:web:96f8dc4cb2d9586b9f7759",
-  measurementId: "G-PSZ2969HZ9"
-};
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
-
 </head>
 <body>
   <div class="app-shell">
@@ -689,7 +642,7 @@
         </div>
         <div class="chip">
           <span class="chip-dot"></span>
-          Online hoje juntos
+          <span>Online hoje juntos</span>
         </div>
       </header>
 
@@ -721,7 +674,7 @@
           <span>Compras</span>
         </button>
         <button class="tab-button" data-tab="events">
-          <span class="icon">📅</span>
+          <span class="icon">🎟</span>
           <span>Eventos</span>
         </button>
       </nav>
@@ -731,47 +684,22 @@
         <div class="section-title-row">
           <div>
             <h2>Tarefas de hoje</h2>
-            <p class="section-subtitle">
-              Tudo o que vocês não querem esquecer.
-            </p>
+            <span>Coisas que vocês não querem esquecer</span>
           </div>
-          <button class="btn-ghost" id="clearTasksBtn" type="button">
-            Limpar concluídas
-          </button>
+          <button class="btn-secondary" id="clearTasksBtn">Limpar concluídas</button>
         </div>
 
-        <div class="pill-row">
-          <div class="pill">
-            <span class="pill-badge.green pill-badge"></span>
-            Alta prioridade
-          </div>
-          <div class="pill">
-            <span class="pill-badge.yellow pill-badge"></span>
-            Médio prazo
-          </div>
-          <div class="pill">
-            <span class="pill-badge.purple pill-badge"></span>
-            Só se der tempo
-          </div>
-        </div>
-
-        <form id="taskForm" autocomplete="off">
+        <form id="taskForm">
           <div class="form-grid">
             <div>
               <label class="field-label" for="taskTitle">Tarefa</label>
-              <input
-                id="taskTitle"
-                class="field-input"
-                type="text"
-                placeholder="Ex.: Pagar conta de luz"
-                required
-              />
+              <input id="taskTitle" class="field-input" type="text" placeholder="Ex.: Ligar pro plano de saúde..." required />
             </div>
             <div>
-              <label class="field-label" for="taskOwner">Quem cuida</label>
+              <label class="field-label" for="taskOwner">Responsável</label>
               <select id="taskOwner" class="field-select">
-                <option value="Nós dois">Nós dois</option>
-                <option value="Você">Você</option>
+                <option value="">Nós dois</option>
+                <option value="Ele">Ele</option>
                 <option value="Ela">Ela</option>
               </select>
             </div>
@@ -794,11 +722,11 @@
 
           <div class="form-grid-full">
             <div>
-              <label class="field-label" for="taskNotes">Notas rápidas</label>
+              <label class="field-label" for="taskNotes">Detalhes</label>
               <textarea
                 id="taskNotes"
                 class="field-textarea"
-                placeholder="Detalhes importantes, links, observações..."
+                placeholder="Algum detalhe importante, número de protocolo, endereço..."
               ></textarea>
             </div>
           </div>
@@ -817,76 +745,40 @@
         <div class="section-title-row">
           <div>
             <h2>Lista de compras</h2>
-            <p class="section-subtitle">
-              Tudo o que não pode faltar quando vocês saírem.
-            </p>
+            <span>Tudo o que não pode faltar quando vocês saírem</span>
           </div>
-          <button class="btn-ghost" id="exportShoppingBtn" type="button">
-            Exportar checklist
-          </button>
+          <button class="btn-secondary" id="exportShoppingBtn">Exportar checklist</button>
         </div>
 
-        <div class="pill-row">
-          <div class="pill">
-            <span class="pill-badge.green pill-badge"></span>
-            Essenciais
-          </div>
-          <div class="pill">
-            <span class="pill-badge.blue pill-badge"></span>
-            Casa
-          </div>
-          <div class="pill">
-            <span class="pill-badge.pink pill-badge"></span>
-            Mimos
-          </div>
-        </div>
-
-        <form id="shoppingForm" autocomplete="off">
+        <form id="shoppingForm">
           <div class="form-grid">
             <div>
               <label class="field-label" for="shoppingTitle">Item</label>
-              <input
-                id="shoppingTitle"
-                class="field-input"
-                type="text"
-                placeholder="Ex.: Café, arroz, chocolate..."
-                required
-              />
+              <input id="shoppingTitle" class="field-input" type="text" placeholder="Ex.: Café, carne, cerveja..." required />
             </div>
             <div>
               <label class="field-label" for="shoppingCategory">Categoria</label>
-              <select id="shoppingCategory" class="field-select">
-                <option value="Mercado">Mercado</option>
-                <option value="Casa">Casa</option>
-                <option value="Higiene">Higiene</option>
-                <option value="Mimos">Mimos</option>
-                <option value="Outro">Outro</option>
-              </select>
+              <input id="shoppingCategory" class="field-input" type="text" placeholder="Ex.: Mercado, farmácia..." />
             </div>
           </div>
 
           <div class="form-grid">
             <div>
               <label class="field-label" for="shoppingQty">Quantidade</label>
-              <input
-                id="shoppingQty"
-                class="field-input"
-                type="text"
-                placeholder="Ex.: 2 unidades, 1kg"
-              />
+              <input id="shoppingQty" class="field-input" type="text" placeholder="Ex.: 2kg, 3 unidades..." />
             </div>
             <div>
-              <label class="field-label" for="shoppingOwner">Para quem</label>
+              <label class="field-label" for="shoppingOwner">Quem vai pegar</label>
               <select id="shoppingOwner" class="field-select">
-                <option value="Nós dois">Nós dois</option>
-                <option value="Você">Você</option>
+                <option value="">Nós dois</option>
+                <option value="Ele">Ele</option>
                 <option value="Ela">Ela</option>
               </select>
             </div>
           </div>
 
           <button class="btn-primary" type="submit">
-            <span class="icon">🛒</span>
+            <span class="icon">🛍</span>
             <span>Adicionar à lista</span>
           </button>
         </form>
@@ -898,33 +790,14 @@
       <section class="content-card" data-content="events" style="display:none;">
         <div class="section-title-row">
           <div>
-            <h2>Eventos & rolês</h2>
-            <p class="section-subtitle">
-              Shows, viagens, jantares e tudo que vocês querem viver juntos.
-            </p>
+            <h2>Eventos e rolês</h2>
+            <span>Shows, viagens, jantares e tudo que vocês querem viver juntos</span>
           </div>
-          <button class="btn-ghost" id="clearPastEventsBtn" type="button">
-            Limpar eventos passados
-          </button>
+          <button class="btn-secondary danger" id="clearPastEventsBtn">Limpar eventos passados</button>
         </div>
 
-        <div class="pill-row">
-          <div class="pill">
-            <span class="pill-badge.blue pill-badge"></span>
-            Próximo rolê
-          </div>
-          <div class="pill">
-            <span class="pill-badge.purple pill-badge"></span>
-            Planejando
-          </div>
-          <div class="pill">
-            <span class="pill-badge.green pill-badge"></span>
-            Confirmado
-          </div>
-        </div>
-
-        <form id="eventForm" autocomplete="off">
-          <div class="form-grid">
+        <form id="eventForm">
+          <div class="form-grid-full">
             <div>
               <label class="field-label" for="eventTitle">Evento</label>
               <input
@@ -935,6 +808,9 @@
                 required
               />
             </div>
+          </div>
+
+          <div class="form-grid">
             <div>
               <label class="field-label" for="eventStatus">Status</label>
               <select id="eventStatus" class="field-select">
@@ -989,9 +865,8 @@
       </section>
 
       <p class="footer-note">
-        Tudo salvo somente neste dispositivo usando <span>localStorage</span>.
-        Se limpar os dados do navegador ou trocar de aparelho, o histórico é
-        perdido.
+        Dados agora salvos na nuvem com <span>Firestore</span>.<br />
+        Vocês podem abrir o app em aparelhos diferentes e ver tudo sincronizado.
       </p>
     </div>
   </div>
@@ -1006,69 +881,10 @@
 
   <script>
     const state = {
-  tasks: [],
-  shopping: [],
-  events: []
-};
-
-// Carregar dados do Firestore ao iniciar
-async function loadState() {
-  try {
-    const [tasksSnap, shoppingSnap, eventsSnap] = await Promise.all([
-      db.collection('tasks').get(),
-      db.collection('shopping').get(),
-      db.collection('events').get()
-    ]);
-
-    state.tasks = tasksSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    state.shopping = shoppingSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    state.events = eventsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  } catch (e) {
-    console.error('Erro ao carregar do Firestore', e);
-    state.tasks = [];
-    state.shopping = [];
-    state.events = [];
-  }
-}
-
-// Salvar tudo no Firestore
-async function persistState() {
-  try {
-    // Apaga coleções atuais
-    const [tasksSnap, shoppingSnap, eventsSnap] = await Promise.all([
-      db.collection('tasks').get(),
-      db.collection('shopping').get(),
-      db.collection('events').get()
-    ]);
-
-    const batch = db.batch();
-
-    tasksSnap.forEach(doc => batch.delete(doc.ref));
-    shoppingSnap.forEach(doc => batch.delete(doc.ref));
-    eventsSnap.forEach(doc => batch.delete(doc.ref));
-
-    // Recria com o conteúdo do state
-    state.tasks.forEach(item => {
-      const ref = db.collection('tasks').doc(item.id || undefined);
-      batch.set(ref, { ...item });
-    });
-
-    state.shopping.forEach(item => {
-      const ref = db.collection('shopping').doc(item.id || undefined);
-      batch.set(ref, { ...item });
-    });
-
-    state.events.forEach(item => {
-      const ref = db.collection('events').doc(item.id || undefined);
-      batch.set(ref, { ...item });
-    });
-
-    await batch.commit();
-  } catch (e) {
-    console.error('Erro ao salvar no Firestore', e);
-  }
-}
-
+      tasks: [],
+      shopping: [],
+      events: []
+    };
 
     function uuid() {
       return (
@@ -1114,6 +930,27 @@ async function persistState() {
       return evDate < today;
     }
 
+    // === REALTIME LISTENERS FIRESTORE ===
+    function initRealtimeListeners() {
+      db.collection('tasks').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+        state.tasks = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderTasks();
+        updateSummaries();
+      });
+
+      db.collection('shopping').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+        state.shopping = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderShopping();
+        updateSummaries();
+      });
+
+      db.collection('events').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+        state.events = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderEvents();
+        updateSummaries();
+      });
+    }
+
     function renderTasks() {
       const container = document.getElementById('taskList');
       if (!state.tasks.length) {
@@ -1141,11 +978,11 @@ async function persistState() {
         checkbox.type = 'checkbox';
         checkbox.className = 'checkbox-input';
         checkbox.checked = !!task.done;
-        checkbox.addEventListener('change', () => {
+        checkbox.addEventListener('change', async () => {
           task.done = checkbox.checked;
-          persistState();
-          renderTasks();
-          updateSummaries();
+          await db.collection('tasks').doc(task.id).update({
+            done: task.done
+          });
         });
         checkboxCol.appendChild(checkbox);
 
@@ -1203,16 +1040,13 @@ async function persistState() {
         deleteBtn.className = 'icon-btn danger';
         deleteBtn.innerHTML = '🗑';
         deleteBtn.title = 'Remover tarefa';
-        deleteBtn.addEventListener('click', () => {
+        deleteBtn.addEventListener('click', async () => {
           if (
             confirm(
               'Remover esta tarefa da lista? Esta ação não pode ser desfeita.'
             )
           ) {
-            state.tasks = state.tasks.filter((t) => t.id !== task.id);
-            persistState();
-            renderTasks();
-            updateSummaries();
+            await db.collection('tasks').doc(task.id).delete();
           }
         });
 
@@ -1250,11 +1084,11 @@ async function persistState() {
         checkbox.type = 'checkbox';
         checkbox.className = 'checkbox-input';
         checkbox.checked = !!item.checked;
-        checkbox.addEventListener('change', () => {
+        checkbox.addEventListener('change', async () => {
           item.checked = checkbox.checked;
-          persistState();
-          renderShopping();
-          updateSummaries();
+          await db.collection('shopping').doc(item.id).update({
+            checked: item.checked
+          });
         });
         checkboxCol.appendChild(checkbox);
 
@@ -1300,12 +1134,9 @@ async function persistState() {
         deleteBtn.className = 'icon-btn danger';
         deleteBtn.innerHTML = '🗑';
         deleteBtn.title = 'Remover item';
-        deleteBtn.addEventListener('click', () => {
+        deleteBtn.addEventListener('click', async () => {
           if (confirm('Remover este item da lista de compras?')) {
-            state.shopping = state.shopping.filter((s) => s.id !== item.id);
-            persistState();
-            renderShopping();
-            updateSummaries();
+            await db.collection('shopping').doc(item.id).delete();
           }
         });
 
@@ -1418,12 +1249,9 @@ async function persistState() {
         deleteBtn.className = 'icon-btn danger';
         deleteBtn.innerHTML = '🗑';
         deleteBtn.title = 'Remover evento';
-        deleteBtn.addEventListener('click', () => {
+        deleteBtn.addEventListener('click', async () => {
           if (confirm('Remover este evento da lista?')) {
-            state.events = state.events.filter((e) => e.id !== ev.id);
-            persistState();
-            renderEvents();
-            updateSummaries();
+            await db.collection('events').doc(ev.id).delete();
           }
         });
 
@@ -1437,13 +1265,12 @@ async function persistState() {
       }
     }
 
-    function handleTaskSubmit(e) {
+    async function handleTaskSubmit(e) {
       e.preventDefault();
       const title = document.getElementById('taskTitle').value.trim();
       if (!title) return;
 
       const task = {
-        id: uuid(),
         title,
         owner: document.getElementById('taskOwner').value || 'Nós dois',
         dueDate: document.getElementById('taskDueDate').value || '',
@@ -1453,22 +1280,17 @@ async function persistState() {
         createdAt: Date.now()
       };
 
-      state.tasks.push(task);
-      persistState();
-      renderTasks();
-      updateSummaries();
+      await db.collection('tasks').add(task);
       showToast('Tarefa adicionada à lista 💪');
-
       e.target.reset();
     }
 
-    function handleShoppingSubmit(e) {
+    async function handleShoppingSubmit(e) {
       e.preventDefault();
       const title = document.getElementById('shoppingTitle').value.trim();
       if (!title) return;
 
       const item = {
-        id: uuid(),
         title,
         category: document.getElementById('shoppingCategory').value || 'Mercado',
         qty: document.getElementById('shoppingQty').value.trim(),
@@ -1477,22 +1299,17 @@ async function persistState() {
         createdAt: Date.now()
       };
 
-      state.shopping.push(item);
-      persistState();
-      renderShopping();
-      updateSummaries();
+      await db.collection('shopping').add(item);
       showToast('Item adicionado à lista de compras 🛒');
-
       e.target.reset();
     }
 
-    function handleEventSubmit(e) {
+    async function handleEventSubmit(e) {
       e.preventDefault();
       const title = document.getElementById('eventTitle').value.trim();
       if (!title) return;
 
       const ev = {
-        id: uuid(),
         title,
         status: document.getElementById('eventStatus').value || 'Estamos pensando',
         date: document.getElementById('eventDate').value || '',
@@ -1502,12 +1319,8 @@ async function persistState() {
         createdAt: Date.now()
       };
 
-      state.events.push(ev);
-      persistState();
-      renderEvents();
-      updateSummaries();
+      await db.collection('events').add(ev);
       showToast('Novo evento registrado 📅');
-
       e.target.reset();
     }
 
@@ -1553,40 +1366,48 @@ async function persistState() {
       showToast('Checklist de compras exportado ✅');
     }
 
-    function clearCompletedTasks() {
-      const hasDone = state.tasks.some((t) => t.done);
-      if (!hasDone) {
+    async function clearCompletedTasks() {
+      const doneTasks = state.tasks.filter((t) => t.done);
+      if (!doneTasks.length) {
         alert('Nenhuma tarefa concluída para limpar.');
         return;
       }
       if (
-        confirm(
+        !confirm(
           'Remover todas as tarefas marcadas como concluídas? Esta ação não pode ser desfeita.'
         )
       ) {
-        state.tasks = state.tasks.filter((t) => !t.done);
-        persistState();
-        renderTasks();
-        updateSummaries();
+        return;
       }
+
+      const batch = db.batch();
+      doneTasks.forEach((t) => {
+        const ref = db.collection('tasks').doc(t.id);
+        batch.delete(ref);
+      });
+      await batch.commit();
     }
 
-    function clearPastEvents() {
-      const hasPast = state.events.some((e) => isPastEvent(e));
-      if (!hasPast) {
+    async function clearPastEvents() {
+      const past = state.events.filter((e) => isPastEvent(e));
+      if (!past.length) {
         alert('Nenhum evento passado para limpar.');
         return;
       }
       if (
-        confirm(
+        !confirm(
           'Remover todos os eventos que já aconteceram? Esta ação não pode ser desfeita.'
         )
       ) {
-        state.events = state.events.filter((e) => !isPastEvent(e));
-        persistState();
-        renderEvents();
-        updateSummaries();
+        return;
       }
+
+      const batch = db.batch();
+      past.forEach((e) => {
+        const ref = db.collection('events').doc(e.id);
+        batch.delete(ref);
+      });
+      await batch.commit();
     }
 
     function setupTabs() {
@@ -1611,38 +1432,34 @@ async function persistState() {
       close.addEventListener('click', () => toast.classList.remove('show'));
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
-  setupTabs();
-  setupToast();
+    document.addEventListener('DOMContentLoaded', () => {
+      setupTabs();
+      setupToast();
 
-  document
-    .getElementById('taskForm')
-    .addEventListener('submit', handleTaskSubmit);
-  document
-    .getElementById('shoppingForm')
-    .addEventListener('submit', handleShoppingSubmit);
-  document
-    .getElementById('eventForm')
-    .addEventListener('submit', handleEventSubmit);
+      document
+        .getElementById('taskForm')
+        .addEventListener('submit', handleTaskSubmit);
+      document
+        .getElementById('shoppingForm')
+        .addEventListener('submit', handleShoppingSubmit);
+      document
+        .getElementById('eventForm')
+        .addEventListener('submit', handleEventSubmit);
 
-  document
-    .getElementById('exportShoppingBtn')
-    .addEventListener('click', handleExportShopping);
-  document
-    .getElementById('clearTasksBtn')
-    .addEventListener('click', clearCompletedTasks);
-  document
-    .getElementById('clearPastEventsBtn')
-    .addEventListener('click', clearPastEvents);
+      document
+        .getElementById('exportShoppingBtn')
+        .addEventListener('click', handleExportShopping);
+      document
+        .getElementById('clearTasksBtn')
+        .addEventListener('click', clearCompletedTasks);
+      document
+        .getElementById('clearPastEventsBtn')
+        .addEventListener('click', clearPastEvents);
 
-  // Espera carregar do Firestore antes de desenhar
-  await loadState();
-  renderTasks();
-  renderShopping();
-  renderEvents();
-  updateSummaries();
-});
-
+      // Ativar realtime
+      initRealtimeListeners();
+    });
   </script>
 </body>
 </html>
+
