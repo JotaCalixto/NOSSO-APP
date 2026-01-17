@@ -880,6 +880,18 @@
   </div>
 
   <script>
+      // registrar o service worker do Firebase Messaging
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/NOSSO-APP/firebase-messaging-sw.js')
+      .then((registration) => {
+        console.log('SW registrado', registration.scope);
+      })
+      .catch((err) => {
+        console.error('Erro ao registrar SW', err);
+      });
+  }
+
     const state = {
       tasks: [],
       shopping: [],
@@ -1462,3 +1474,4 @@
   </script>
 </body>
 </html>
+
