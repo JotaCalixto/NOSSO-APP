@@ -885,7 +885,7 @@
       // registrar o service worker do Firebase Messaging
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
-      .register('/NOSSO-APP/firebase-messaging-sw.js')
+      .register('./firebase-messaging-sw.js')
       .then((registration) => {
         console.log('SW registrado', registration.scope);
       })
@@ -1502,4 +1502,5 @@
   </script>
 </body>
 </html>
+
 
