@@ -1444,6 +1444,29 @@
       const close = document.getElementById('toastCloseBtn');
       close.addEventListener('click', () => toast.classList.remove('show'));
     }
+    async function initNotifications() {
+  if (!('Notification' in window)) {
+    console.log('Navegador não suporta Notification');
+    return;
+  }
+
+  const permission = await Notification.requestPermission();
+  if (permission !== 'granted') {
+    console.log('Permissão de notificação negada');
+    return;
+  }
+
+  try {
+    const token = await messaging.getToken({
+      vapidKey: 'BATYttoudldnMFR_1ljGFls_25xhUr1UKP07W3W5coARn4l9_kF3xuWpEN5V17KUtLgxWCpnPELEbHaMZg5YpTo'
+    });
+
+    console.log('FCM token:', token);
+  } catch (err) {
+    console.error('Erro ao obter token FCM', err);
+  }
+}
+
 
     document.addEventListener('DOMContentLoaded', () => {
       setupTabs();
@@ -1471,9 +1494,10 @@
 
       // Ativar realtime
       initRealtimeListeners();
+
+      // pedir permissão de push
+      initNotifications();
     });
   </script>
 </body>
 </html>
-
-
